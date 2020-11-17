@@ -229,16 +229,21 @@ class Util {
         return data;
     }
 
-    static processNumberPrecision(doc, key = "amount") {
+    static processNumberPrecision(doc, key = "amount", currency) {
         let data = _.cloneDeep(doc);
-        if (!data.hasOwnProperty(key) || !data.currency) {
+        if (!data.hasOwnProperty(key)) {
             return data;
         }
+        let _currency = currency || data.currency;
+        if (!_currency) {
+            return data;
+        }
+
         if (_.isNaN(Number(data[key]))) {
             throw new InvalidParameter(`The amount type must be either a number or a string type number. data.${key}=${data[key]}`);
         }
 
-        let precision = _.find(precisions, {currency: data.currency.toLowerCase()});
+        let precision = _.find(precisions, {currency: _currency.toLowerCase()});
         if (!precision) {
             return data;
         }
@@ -254,9 +259,13 @@ class Util {
         return data;
     }
 
-    static processNumberPrecisionKeys(doc, keys = ["amount"]) {
+    static processNumberPrecisionKeys(doc, keys = ["amount"], currency) {
         let data = _.cloneDeep(doc);
-        if (!keys || !_.isArray(keys) || !keys.length || !data.currency) {
+        if (!keys || !_.isArray(keys) || !keys.length) {
+            return data;
+        }
+        let _currency = currency || data.currency;
+        if (!_currency) {
             return data;
         }
 
@@ -268,7 +277,7 @@ class Util {
             if (_.isNaN(Number(data[key]))) {
                 continue;
             }
-            let precision = _.find(precisions, {currency: data.currency.toLowerCase()});
+            let precision = _.find(precisions, {currency: _currency.toLowerCase()});
             if (!precision) {
                 continue;
             }

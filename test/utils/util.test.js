@@ -194,29 +194,68 @@ describe("Util.plugin", () => {
             chain:  "eth",
             amount: "0.213900000000222213213213111",
         };
-        assert.strictEqual(Util.processNumberPrecision(data).amount, data.amount);
+
+        let res = Util.processNumberPrecision(data);
+        assert.strictEqual(res.amount, data.amount);
 
         data.currency = "eth";
-        assert.strictEqual(Util.processNumberPrecision(data).amount.split(".")[1].length, 10);
+        res           = Util.processNumberPrecision(data);
+        assert.strictEqual(res.amount.split(".")[1].length, 10);
+
+        res = Util.processNumberPrecision(data, "amount", "usdt");
+        assert.strictEqual(res.currency, data.currency);
+        assert.strictEqual(res.amount.split(".")[1].length, 4);
 
         data.currency = "ETH";
-        assert.strictEqual(Util.processNumberPrecision(data).amount.split(".")[1].length, 10);
-        assert.strictEqual(Util.processNumberPrecision(data).currency, "ETH");
+        res           = Util.processNumberPrecision(data);
+        assert.strictEqual(res.amount.split(".")[1].length, 10);
+        assert.strictEqual(res.currency, "ETH");
 
         data.currency = "ieth";
-        assert.strictEqual(Util.processNumberPrecision(data).amount.split(".")[1].length, 10);
+        res           = Util.processNumberPrecision(data);
+        assert.strictEqual(res.amount.split(".")[1].length, 10);
+
+        res = Util.processNumberPrecision(data, "amount", "iusdt");
+        assert.strictEqual(res.currency, data.currency);
+        assert.strictEqual(res.amount.split(".")[1].length, 4);
 
         data.currency = "usdt";
-        assert.strictEqual(Util.processNumberPrecision(data).amount.split(".")[1].length, 4);
+        res           = Util.processNumberPrecision(data);
+        assert.strictEqual(res.amount.split(".")[1].length, 4);
+
+        res = Util.processNumberPrecision(data, "amount", "eth");
+        assert.strictEqual(res.currency, data.currency);
+        assert.strictEqual(res.currency, "usdt");
+        assert.strictEqual(res.amount.split(".")[1].length, 10);
 
         data.currency = "iusdt";
-        assert.strictEqual(Util.processNumberPrecision(data).amount.split(".")[1].length, 4);
+        res           = Util.processNumberPrecision(data);
+        assert.strictEqual(res.amount.split(".")[1].length, 4);
+
+        res = Util.processNumberPrecision(data, "amount", "ieth");
+        assert.strictEqual(res.currency, data.currency);
+        assert.strictEqual(res.currency, "iusdt");
+        assert.strictEqual(res.amount.split(".")[1].length, 10);
 
         data.currency = "trx";
-        assert.strictEqual(Util.processNumberPrecision(data).amount.split(".")[1].length, 6);
+        res           = Util.processNumberPrecision(data);
+        assert.strictEqual(res.amount.split(".")[1].length, 6);
+
+        res = Util.processNumberPrecision(data, "amount", "cny");
+        assert.strictEqual(res.currency, data.currency);
+        assert.strictEqual(res.currency, "trx");
+        assert.strictEqual(res.amount.split(".")[1].length, 2);
+
 
         data.currency = "cny";
+        res           = Util.processNumberPrecision(data);
         assert.strictEqual(Util.processNumberPrecision(data).amount.split(".")[1].length, 2);
+
+        res = Util.processNumberPrecision(data, "amount", "trx");
+        assert.strictEqual(res.currency, data.currency);
+        assert.strictEqual(res.currency, "cny");
+        assert.strictEqual(res.amount.split(".")[1].length, 6);
+
 
         data.currency = "other";
         assert.strictEqual(Util.processNumberPrecision(data).amount, data.amount);
