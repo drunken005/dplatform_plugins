@@ -39,7 +39,7 @@ class BigNumber {
         let bn;
         _.each(numbers, (number) => {
             if (!number) {
-                return;
+                number = 0;
             }
             number = BigNumber.toWei(number.toString());
             if (!bn) {
@@ -63,6 +63,9 @@ class BigNumber {
         }
         let bn;
         _.each(numbers, (number) => {
+            if (!number) {
+                number = 0;
+            }
             number = BigNumber.toWei(number.toString());
             if (!bn) {
                 bn = new BN(number.toString());
@@ -94,7 +97,7 @@ class BigNumber {
         let bn;
         _.each(numbers, (number) => {
             if (!number) {
-                return;
+                number = 0;
             }
             number = BigNumber.toWei(number.toString());
             if (!bn) {
