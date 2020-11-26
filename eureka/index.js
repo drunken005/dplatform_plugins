@@ -31,9 +31,9 @@ class EurekaClient {
                 },
                 instanceId:     this.instanceId || options.name,
                 vipAddress:     options.name,
-                statusPageUrl:  `http://${hostName}:${options.port}/report/health`,
-                healthCheckUrl: `http://${hostName}:${options.port}/report/health`,
-                homePageUrl:    `http://${hostName}:${options.port}/report/health`,
+                statusPageUrl:  `http://${hostName}:${options.port}/health`,
+                healthCheckUrl: `http://${hostName}:${options.port}/health`,
+                homePageUrl:    `http://${hostName}:${options.port}/health`,
                 dataCenterInfo: {
                     "@class": "com.netflix.appinfo.InstanceInfo$DefaultDataCenterInfo",
                     name:     "MyOwn",
