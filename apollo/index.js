@@ -46,7 +46,9 @@ class Apollo {
             redis      = JSON.parse(redis);
             let _redis = [];
             for (let _doc of redis) {
-                _doc.password = await Kms.decrypt(_doc.password);
+                if (_doc.password) {
+                    _doc.password = await Kms.decrypt(_doc.password);
+                }
                 _redis.push(_doc);
             }
             _config.redis = JSON.stringify(_redis);
