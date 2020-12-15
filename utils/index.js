@@ -20,7 +20,7 @@ const precisions = [
         precision: 4,
     },
     {
-        currency:  "feth",
+        currency:  "fcm",
         precision: 10,
     },
     {
@@ -224,7 +224,7 @@ class Util {
     static formatChainCurrency(data, addressKey) {
         let identifier = new Identifier(data.chain, data.currency);
         data           = _.extend(data, _.pick(identifier.export(), ["chain", "currency"]));
-        if (_.includes(["eth", "ieth", "feth"], identifier.chain)) {
+        if (_.includes(["eth", "ieth", "fcm"], identifier.chain)) {
             if (_.isArray(addressKey)) {
                 _.each(addressKey, (item) => {
                     data[item] && (data[item] = Util.ethAddressFormat(data[item]));
