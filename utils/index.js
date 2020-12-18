@@ -97,10 +97,10 @@ class Util {
     }
 
     static getIpv4() {
-        let networkInterfaces = os.networkInterfaces();
-        let nets              = networkInterfaces.en0 ? networkInterfaces.en0 : networkInterfaces.eth0;
-        nets                  = nets ? nets : networkInterfaces.ens224;
-        let {address}         = _.find(nets, {family: "IPv4"});
+        let networkInterfaces         = os.networkInterfaces();
+        let {en0, eth0, ens224, ens5} = networkInterfaces;
+        let nets                      = en0 || eth0 || ens224 || ens5;
+        let {address}                 = _.find(nets, {family: "IPv4"});
         return address;
     }
 

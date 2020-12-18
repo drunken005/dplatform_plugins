@@ -1,6 +1,6 @@
 {
   "name": "dplatform_plugins",
-  "version": "1.0.7",
+  "version": "2.0.1",
   "description": "plugins",
   "main": "index.js",
   "scripts": {
