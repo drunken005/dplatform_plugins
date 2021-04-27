@@ -1,6 +1,6 @@
 {
   "name": "dplatform_plugins",
-  "version": "2.2.1",
+  "version": "2.4.0",
   "description": "plugins",
   "main": "index.js",
   "scripts": {
@@ -29,6 +29,7 @@
     "koa2-ratelimit": "^0.9.0",
     "lodash": "^4.17.20",
     "log4js": "^6.3.0",
+    "moment-timezone": "^0.5.32",
     "mysql2": "^2.2.5",
     "node-rsa": "^1.1.1",
     "redlock": "^4.2.0",

@@ -1,4 +1,5 @@
 const apollo  = require("ctrip-apollo");
+const moment  = require("moment-timezone");
 const _       = require("lodash");
 const rebuild = require("./rebuild");
 const Util    = require("../utils");
@@ -15,6 +16,7 @@ class Apollo {
      * @returns {Promise<void>}
      */
     static async init(options) {
+        let kms                           = new Kms();
         const {logger, options: _options} = Util.checkApolloOptions(options);
         logger.info(">>>>>>>>> Init apollo and loading config       >>>>>>>>>");
         const _namespace = apollo(_options).cluster(_options.cluster).namespace(_options.namespace);
@@ -22,7 +24,7 @@ class Apollo {
         _config          = _ready.config();
         for (let _key of KMS_DECRYPT_KEYS) {
             if (!!_config[_key]) {
-                _config[_key] = await Kms.decrypt(_config[_key]);
+                _config[_key] = await kms.decrypt(_config[_key]);
             }
         }
         Apollo._setNodeEnv(_config, null, logger);
@@ -47,7 +49,7 @@ class Apollo {
             let _redis = [];
             for (let _doc of redis) {
                 if (_doc.password) {
-                    _doc.password = await Kms.decrypt(_doc.password);
+                    _doc.password = await kms.decrypt(_doc.password);
                 }
                 _redis.push(_doc);
             }
@@ -104,10 +106,11 @@ class Apollo {
     }
 
     static getMysqlConnection() {
-        let db             = Apollo.get("db");
-        db.options.logging = db.logging ? require("../logger")().sql : db.logging;
-        let uri            = `mysql://${db.username}:${db.password}@${db.host}:${db.port}/${db.name}`;
-        uri                = uri.replace(/%/g, "%25");
+        let db              = Apollo.get("db");
+        db.options.logging  = db.logging ? require("../logger")().sql : db.logging;
+        db.options.timezone = moment().format("Z");
+        let uri             = `mysql://${db.username}:${db.password}@${db.host}:${db.port}/${db.name}`;
+        uri                 = uri.replace(/%/g, "%25");
         delete _config["db.password"];
         return [uri, db.options];
     }

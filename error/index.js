@@ -45,70 +45,70 @@ class MyException extends Error {
 
 class Success extends MyException {
     constructor(detail) {
-        super(CodeStateEnum.SUCCESS.value, SubCodeStateEnum.ONE.value, `${SuccessSubCodeMessageEnum[SubCodeStateEnum.ONE.value].value}`, detail);
+        super(CodeStateEnum.SUCCESS.value, SubCodeStateEnum.ONE.value, ``, detail);
     }
 }
 
 
 class Fail extends MyException {
     constructor(detail) {
-        super(CodeStateEnum.COMMON.value, SubCodeStateEnum.TWO.value, `${SuccessSubCodeMessageEnum[SubCodeStateEnum.TWO.value].value}`, detail);
+        super(CodeStateEnum.COMMON.value, SubCodeStateEnum.TWO.value, ``, detail);
     }
 }
 
 
 class InvalidParameter extends MyException {
     constructor(detail) {
-        super(CodeStateEnum.COMMON.value, SubCodeStateEnum.ONE.value, `${CommonSubCodeMessageEnum[SubCodeStateEnum.ONE.value].value}||detail=`, detail);
+        super(CodeStateEnum.COMMON.value, SubCodeStateEnum.ONE.value, ``, detail);
     }
 }
 
 
 class ItemNotFound extends MyException {
     constructor(detail) {
-        super(CodeStateEnum.COMMON.value, SubCodeStateEnum.TWO.value, `${CommonSubCodeMessageEnum[SubCodeStateEnum.TWO.value].value}||detail=`, detail);
+        super(CodeStateEnum.COMMON.value, SubCodeStateEnum.TWO.value, ``, detail);
     }
 }
 
 
 class MySQLException extends MyException {
     constructor(detail) {
-        super(CodeStateEnum.COMMON.value, SubCodeStateEnum.THREE.value, `${CommonSubCodeMessageEnum[SubCodeStateEnum.THREE.value].value}||detail=`, detail);
+        super(CodeStateEnum.COMMON.value, SubCodeStateEnum.THREE.value, ``, detail);
     }
 }
 
 
 class TooManyRequests extends MyException {
     constructor(detail) {
-        super(CodeStateEnum.COMMON.value, SubCodeStateEnum.FIVE.value, `${CommonSubCodeMessageEnum[SubCodeStateEnum.FIVE.value].value}||detail=`, detail);
+        super(CodeStateEnum.COMMON.value, SubCodeStateEnum.FIVE.value, ``, detail);
     }
 }
 
 
 class ItemMisMatched extends MyException {
     constructor(detail) {
-        super(CodeStateEnum.COMMON.value, SubCodeStateEnum.SIX.value, `${CommonSubCodeMessageEnum[SubCodeStateEnum.SIX.value].value}||detail=`, detail);
+        super(CodeStateEnum.COMMON.value, SubCodeStateEnum.SIX.value, ``, detail);
     }
 }
 
 
 class UncaughtException extends MyException {
     constructor(detail) {
-        super(CodeStateEnum.COMMON.value, SubCodeStateEnum.TEN.value, `${CommonSubCodeMessageEnum[SubCodeStateEnum.TEN.value].value}||detail=`, detail);
+        super(CodeStateEnum.COMMON.value, SubCodeStateEnum.TEN.value, ``, detail);
     }
 }
 
 
 class NetworkTimeout extends MyException {
     constructor(detail) {
-        super(CodeStateEnum.HTTP.value, SubCodeStateEnum.ONE.value, `${HttpSubCodeMessageEnum[SubCodeStateEnum.ONE.value].value}||detail=`, detail);
+        super(CodeStateEnum.HTTP.value, SubCodeStateEnum.ONE.value, ``, detail);
     }
 }
 
 
 class HttpUncaughtException extends MyException {
     constructor(detail) {
-        super(CodeStateEnum.HTTP.value, SubCodeStateEnum.TEN.value, `${HttpSubCodeMessageEnum[SubCodeStateEnum.TEN.value].value}||detail=`, detail);
+        super(CodeStateEnum.HTTP.value, SubCodeStateEnum.TEN.value, ``, detail);
     }
 }
 

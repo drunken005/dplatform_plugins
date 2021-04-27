@@ -1,15 +1,11 @@
 const KmsClient = require("@alicloud/kms-sdk");
 const _         = require("lodash");
-const Util    = require("../utils");
-let kmsClient;
+const Util      = require("../utils");
 
 class Kms {
     constructor() {
         let options = Util.kmsOptions();
         this.client = new KmsClient(options);
-        delete process.env.kms_accessKeyId;
-        delete process.env.kms_secret;
-        delete process.env.kms_regionId;
     }
 
     async encrypt(keyId, plaintext, encryptionContext) {
@@ -49,8 +45,4 @@ class Kms {
     }
 }
 
-if (!kmsClient) {
-    kmsClient = new Kms();
-}
-
-module.exports = kmsClient;
+module.exports = Kms;

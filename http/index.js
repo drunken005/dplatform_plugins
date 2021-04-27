@@ -19,14 +19,14 @@ class Http {
                 reqid,
                 method:  options.method,
                 uri:     options.uri,
-                headers: "*",
-                params:  "*",
+                headers: options.headers,
+                params:  options.body,
                 msg:     "http request begin...",
             };
-            if (!Util.hiddenLog) {
-                request.headers = options.headers;
-                request.params  = options.body;
-            }
+            // if (!Util.hiddenLog) {
+            //     request.headers = options.headers;
+            //     request.params  = options.body;
+            // }
             logger.info(request);
 
 
@@ -39,16 +39,16 @@ class Http {
                 reqid,
                 method:   options.method,
                 uri:      options.uri,
-                headers:  "*",
-                response: `${JSON.stringify(_.pick(result, ["respCode", "msg"]))}`,
+                headers:  options.headers,
+                response: `${JSON.stringify(result)}`,
                 cost:     `${cost}ms`,
                 msg:      `http response end.`,
             };
 
-            if (!Util.hiddenLog) {
-                _response.headers  = options.headers;
-                _response.response = result;
-            }
+            // if (!Util.hiddenLog) {
+            //     _response.headers  = options.headers;
+            //     _response.response = result;
+            // }
             logger.info(_response);
 
             return result;

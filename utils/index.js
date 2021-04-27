@@ -36,11 +36,35 @@ const precisions = [
         precision: 4,
     },
     {
+        currency:  "du",
+        precision: 10,
+    },
+    {
+        currency:  "dusdt",
+        precision: 4,
+    },
+    {
         currency:  "trx",
         precision: 6,
     },
     {
         currency:  "cny",
+        precision: 2,
+    },
+    {
+        currency:  "sgd",
+        precision: 2,
+    },
+    {
+        currency:  "myr",
+        precision: 2,
+    },
+    {
+        currency:  "inr",
+        precision: 2,
+    },
+    {
+        currency:  "krw",
         precision: 2,
     },
 ];
@@ -224,7 +248,7 @@ class Util {
     static formatChainCurrency(data, addressKey) {
         let identifier = new Identifier(data.chain, data.currency);
         data           = _.extend(data, _.pick(identifier.export(), ["chain", "currency"]));
-        if (_.includes(["eth", "ieth", "fcm"], identifier.chain)) {
+        if (_.includes(["eth", "ieth", "fcm", "du"], identifier.chain)) {
             if (_.isArray(addressKey)) {
                 _.each(addressKey, (item) => {
                     data[item] && (data[item] = Util.ethAddressFormat(data[item]));
@@ -355,9 +379,6 @@ class Util {
         if (endpoint) {
             endpoint = `kms.${endpoint}.aliyuncs.com`;
         }
-        delete process.env.kms_accessKeyId;
-        delete process.env.kms_secret;
-        delete process.env.kms_regionId;
         return Util.checkKmsOptions({
             endpoint,
             accessKeyId,
