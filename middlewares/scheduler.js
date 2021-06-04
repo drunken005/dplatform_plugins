@@ -15,9 +15,9 @@ class SchedulerMiddleware extends EventEmitter {
      * @param jobList 任务实例
      * @param logger  日志收集器
      */
-    constructor(jobName, jobList, logger) {
+    constructor(jobName, jobList, logger, interval) {
         super();
-        this.logger = logger || console;
+        this.logger   = logger || console;
         const service = Apollo.get(jobName);
 
         const eurekaOption = {
@@ -26,12 +26,14 @@ class SchedulerMiddleware extends EventEmitter {
             name:   jobName,
             eureka: Apollo.get("eureka"),
         };
-        service.eurekaServices && new Eureka(eurekaOption).start();
+        (service && service.eurekaServices) && new Eureka(eurekaOption).start();
+
+        interval = service && service.interval ? service.interval : interval;
 
         this.redisLock    = new RedisLock({logger});
         this.__job_name__ = `${this.constructor.name}(${jobName})`;
         this.__job_list__ = jobList;
-        this.__interval__ = service.interval * 1000;
+        this.__interval__ = interval * 1000;
 
         this.on("startup", this.onStartUp.bind(this));
         this.on("update", this.onUpdate.bind(this));

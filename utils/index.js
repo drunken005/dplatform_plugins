@@ -135,6 +135,10 @@ class Util {
         return input.substring(0, startIndex + 1) + "******" + input.substring(index);
     }
 
+    static filterOptionsPassword(options) {
+        return `${options.dialect}://${options.username}:******@${options.host}:${options.port}/${options.database}`;
+    }
+
     static endCode(data, encoding = "hex") {
         if (!data) {
             return data;

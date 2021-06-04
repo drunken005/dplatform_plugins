@@ -106,7 +106,8 @@ class Apollo {
     }
 
     static getMysqlConnection() {
-        let db              = Apollo.get("db");
+        let db = Apollo.get("db");
+        if (!db) return null;
         db.options.logging  = db.logging ? require("../logger")().sql : db.logging;
         db.options.timezone = moment().format("Z");
         let uri             = `mysql://${db.username}:${db.password}@${db.host}:${db.port}/${db.name}`;
