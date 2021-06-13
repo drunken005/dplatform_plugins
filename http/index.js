@@ -9,7 +9,7 @@ const {HttpUncaughtException, NetworkTimeout} = require("../error");
  * 通用HTTP调用类
  */
 class Http {
-    static async request(parameter, options, logger = console) {
+    static async request(parameter, options, logger = console, hideLog) {
         const startTime = Date.now();
         const {reqid}   = Parameter.fromParameter(parameter);
         const method    = options.method;
@@ -40,7 +40,7 @@ class Http {
                 method:   options.method,
                 uri:      options.uri,
                 headers:  options.headers,
-                response: `${JSON.stringify(result)}`,
+                response: hideLog ? `${JSON.stringify(result)}` : "-----",
                 cost:     `${cost}ms`,
                 msg:      `http response end.`,
             };
