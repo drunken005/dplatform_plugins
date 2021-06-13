@@ -40,7 +40,7 @@ class Http {
                 method:   options.method,
                 uri:      options.uri,
                 headers:  options.headers,
-                response: hideLog ? `${JSON.stringify(result)}` : "-----",
+                response: !!!hideLog ? `${JSON.stringify(result)}` : "{******}",
                 cost:     `${cost}ms`,
                 msg:      `http response end.`,
             };
