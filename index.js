@@ -15,6 +15,7 @@ const Rsa                 = require("./rsa");
 const Util                = require("./utils");
 const ApiMiddleware       = require("./middlewares/apis");
 const SchedulerMiddleware = require("./middlewares/scheduler");
+const AccountUtils        = require("./account_utils");
 
 
 module.exports = {
@@ -35,4 +36,5 @@ module.exports = {
     Util,
     ApiMiddleware,
     SchedulerMiddleware,
+    AccountUtils,
 };

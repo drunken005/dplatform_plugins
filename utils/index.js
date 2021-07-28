@@ -5,6 +5,7 @@ const FlakeId            = require("flake-idgen");
 const NumberFormat       = require("biguint-format");
 const Path               = require("path");
 const Crypto             = require("crypto");
+const CryptoJS           = require("crypto-js");
 const {InvalidParameter} = require("../error");
 const Identifier         = require("../identifier");
 
@@ -70,6 +71,26 @@ const precisions = [
 ];
 
 class Util {
+
+    static encrypt(data, secret) {
+        if (!secret) {
+            throw new Error("Encrypt data secret is null");
+        }
+        if (_.isObject(data)) {
+            data = JSON.stringify(data);
+        }
+        return CryptoJS.AES.encrypt(data, secret).toString();
+    }
+
+    static decrypt(data, secret) {
+        if (!data) {
+            return null;
+        }
+        if (!secret) {
+            throw new Error("Decrypt data secret is null");
+        }
+        return CryptoJS.AES.decrypt(data, secret).toString(CryptoJS.enc.Utf8);
+    };
 
     static async sleep(ms) {
         return new Promise(function (resolve) {

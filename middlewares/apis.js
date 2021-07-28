@@ -8,24 +8,59 @@ const BaseMiddleware                                     = require("./base");
 
 
 class ApiMiddleware extends BaseMiddleware {
-    static __before_request_handler__(ctx) {
-        ctx.state.parameter = Parameter.fromTraceId(ctx.headers["x-b3-traceid"]);
-        ctx.state.startTime = Date.now();
 
-        let request = {
+    static _mask_request(ctx) {
+        let params  = {};
+        let headers = _.cloneDeep(ctx.headers);
+        if (ctx.headers["content-type"] === "application/json") {
+            params = _.cloneDeep(ctx.request.body);
+            _.each(params, (v, k) => {
+                if (_.includes(["password", "token", "verifyCode"], k)) {
+                    params[k] = "****";
+                }
+            });
+        }
+        _.each(headers, (v, k) => {
+            if (k.indexOf("token") >= 0) {
+                headers[k] = `${v.slice(0, 4)}***`;
+            }
+        });
+
+        return {
+            params,
+            headers,
+        };
+    }
+
+    static _mask_response(ctx) {
+        let response = {};
+        if (ctx.type === "application/json") {
+            response = _.cloneDeep(ctx.body);
+            if (response.data && _.isObject(response.data)) {
+                _.each(response.data, (v, k) => {
+                    if (_.includes(["password", "token", "verifyCode"], k)) {
+                        response.data[k] = `${v.slice(0, 4)}***`;
+                    }
+                });
+            }
+
+        }
+        return response;
+    }
+
+    static __before_request_handler__(ctx) {
+        ctx.state.parameter     = Parameter.fromTraceId(ctx.headers["x-b3-traceid"]);
+        ctx.state.startTime     = Date.now();
+        const {params, headers} = ApiMiddleware._mask_request(ctx);
+        let request             = {
             reqid:   ctx.state.parameter.reqid,
             method:  ctx.method,
             url:     ctx.url,
-            headers: ctx.headers,
-            params:  ctx.request.body,
+            headers: headers,
+            params:  params,
             ip:      ctx.request.ip,
             msg:     "A request begin...",
         };
-
-        // if (!Util.hiddenLog) {
-        //     request.headers = ctx.headers;
-        //     request.params  = ctx.request.body;
-        // }
         ctx.logger.in(request);
     }
 
@@ -34,20 +69,15 @@ class ApiMiddleware extends BaseMiddleware {
         ctx.set("x-b3-traceid", ctx.state.parameter.reqid);
         ctx.set("x-response-time", `${cost}ms`);
         ctx.type = ctx.type || "application/json";
-
         let response = {
             reqid:    ctx.state.parameter.reqid,
             method:   ctx.method,
             url:      ctx.url,
             headers:  JSON.stringify(ctx.response.headers),
-            response: ctx.type === "application/json" ? ctx.body : "***",
+            response: ApiMiddleware._mask_response(ctx),
             cost,
             msg:      "A response end.\n",
         };
-        // if (!Util.hiddenLog) {
-        //     response.headers  = JSON.stringify(ctx.response.headers);
-        //     response.response = ctx.body;
-        // }
         ctx.logger.out(response);
     }
 
