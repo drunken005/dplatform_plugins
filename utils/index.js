@@ -6,7 +6,6 @@ const NumberFormat       = require("biguint-format");
 const Path               = require("path");
 const Crypto             = require("crypto");
 const CryptoJS           = require("crypto-js");
-const {InvalidParameter} = require("../error");
 const Identifier         = require("../identifier");
 
 const sequenceProduce = new FlakeId();
@@ -265,7 +264,7 @@ class Util {
 
     static ethAddressFormat(address) {
         if (!address) {
-            throw new InvalidParameter("Address cannot be empty.");
+            throw new Error("Address cannot be empty.");
         }
         return address.toLowerCase();
     }
@@ -297,7 +296,7 @@ class Util {
         }
 
         if (_.isNaN(Number(data[key]))) {
-            throw new InvalidParameter(`The amount type must be either a number or a string type number. data.${key}=${data[key]}`);
+            throw new Error(`The amount type must be either a number or a string type number. data.${key}=${data[key]}`);
         }
 
         let precision = _.find(precisions, {currency: _currency.toLowerCase()});
@@ -358,7 +357,7 @@ class Util {
             return data;
         }
         if (_.isNaN(Number(data[key]))) {
-            throw new InvalidParameter(`The amount type must be either a number or a string type number. data.amount=${data[key]}`);
+            throw new Error(`The amount type must be either a number or a string type number. data.amount=${data[key]}`);
         }
         let identifier = new Identifier(data.chain, data.currency);
         let precision  = _.find(precisions, {currency: identifier.currency});
@@ -431,7 +430,7 @@ class Util {
             }
         });
         if (missKeys.length) {
-            throw new InvalidParameter(`Eureka client init error, options is invalid. missing key: '${missKeys.join(", ")}'`);
+            throw new Error(`Eureka client init error, options is invalid. missing key: '${missKeys.join(", ")}'`);
         }
 
         let eurekaMissKeys = [];
@@ -442,7 +441,7 @@ class Util {
             }
         });
         if (eurekaMissKeys.length) {
-            throw new InvalidParameter(`Eureka client init error, options.eureka is invalid. missing key: '${eurekaMissKeys.join(", ")}'`);
+            throw new Error(`Eureka client init error, options.eureka is invalid. missing key: '${eurekaMissKeys.join(", ")}'`);
         }
         return options;
     }
@@ -456,7 +455,7 @@ class Util {
             }
         });
         if (missKeys.length) {
-            throw new InvalidParameter(`Apollo init error, options is invalid. missing key: '${missKeys.join(", ")}'`);
+            throw new Error(`Apollo init error, options is invalid. missing key: '${missKeys.join(", ")}'`);
         }
         const logger = options.logger || console;
         options      = _.pick(options, keys);
@@ -475,7 +474,7 @@ class Util {
             }
         });
         if (missKeys.length) {
-            throw new InvalidParameter(`Kms init error, options is invalid. missing key: '${missKeys.join(", ")}'`);
+            throw new Error(`Kms init error, options is invalid. missing key: '${missKeys.join(", ")}'`);
         }
         return _.pick(options, keys);
     }

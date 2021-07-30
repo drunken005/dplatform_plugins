@@ -1,10 +1,8 @@
-const KoaBodyParser                                      = require("koa-bodyparser");
-const _                                                  = require("lodash");
-const {RateLimit}                                        = require("koa2-ratelimit");
-const Parameter                                          = require("../parameter");
-const Util                                               = require("../utils");
-const {MyException, UncaughtException, InvalidParameter} = require("../error");
-const BaseMiddleware                                     = require("./base");
+const KoaBodyParser  = require("koa-bodyparser");
+const _              = require("lodash");
+const {RateLimit}    = require("koa2-ratelimit");
+const Parameter      = require("../parameter");
+const BaseMiddleware = require("./base");
 
 
 class ApiMiddleware extends BaseMiddleware {
@@ -68,7 +66,7 @@ class ApiMiddleware extends BaseMiddleware {
         let cost = Date.now() - ctx.state.startTime;
         ctx.set("x-b3-traceid", ctx.state.parameter.reqid);
         ctx.set("x-response-time", `${cost}ms`);
-        ctx.type = ctx.type || "application/json";
+        ctx.type     = ctx.type || "application/json";
         let response = {
             reqid:    ctx.state.parameter.reqid,
             method:   ctx.method,
@@ -82,15 +80,15 @@ class ApiMiddleware extends BaseMiddleware {
     }
 
     static __run_exception_handler__(error, ctx) {
-        if (!(error instanceof MyException)) {
-            error = new UncaughtException(error && error.message);
+        if (!ctx.error.isDoraErrorInstance(error)) {
+            error = new ctx.error.SystemErr("uncaught-error", error && error.message, "uncaught error");
         }
         ctx.body = error.getReturnData();
     }
 
     static onBodyParserError(error, ctx) {
         ApiMiddleware.__before_request_handler__(ctx);
-        ctx.body = new InvalidParameter(error && error.message).getReturnData();
+        ctx.body = new ctx.ParamsErr("post-data-error", error && error.message, "post data error").getReturnData();
         ApiMiddleware.onError(error, ApiMiddleware.onBodyParserError.name);
         ApiMiddleware.__after_response_handler__(ctx);
     }
@@ -103,6 +101,13 @@ class ApiMiddleware extends BaseMiddleware {
         return async (ctx, next) => {
             logger     = logger || require("dplatform-logger")();
             ctx.logger = logger;
+            await next();
+        };
+    }
+
+    static ErrorHandler(error) {
+        return async (ctx, next) => {
+            ctx.error = error;
             await next();
         };
     }
@@ -139,6 +144,5 @@ class ApiMiddleware extends BaseMiddleware {
 
 process.on("uncaughtException", ApiMiddleware.onUncaughtException);
 process.on("unhandledRejection", ApiMiddleware.onUnhandledRejection);
-
 
 module.exports = ApiMiddleware;

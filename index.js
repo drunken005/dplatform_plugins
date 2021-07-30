@@ -1,7 +1,7 @@
 const Apollo              = require("./apollo");
 const BigNumber           = require("./bignum");
 const enums               = require("./enums");
-const errors              = require("./error");
+const ErrorUtils          = require("./error");
 const EurekaClient        = require("./eureka");
 const EurekaStorage       = require("./eureka_storage");
 const Http                = require("./http");
@@ -22,7 +22,7 @@ module.exports = {
     Apollo,
     BigNumber,
     enums,
-    errors,
+    ErrorUtils,
     EurekaClient,
     EurekaStorage,
     Http,

@@ -1,8 +1,6 @@
 const rp                                      = require("request-promise");
 const _                                       = require("lodash");
 const Parameter                               = require("../parameter");
-const Util                                    = require("../utils");
-const {HttpUncaughtException, NetworkTimeout} = require("../error");
 
 
 /**
@@ -23,18 +21,9 @@ class Http {
                 params:  options.body,
                 msg:     "http request begin...",
             };
-            // if (!Util.hiddenLog) {
-            //     request.headers = options.headers;
-            //     request.params  = options.body;
-            // }
             logger.info(request);
-
-
-            let result = await rp(options);
-
-
-            let cost = Date.now() - startTime;
-
+            let result    = await rp(options);
+            let cost      = Date.now() - startTime;
             let _response = {
                 reqid,
                 method:   options.method,
@@ -45,18 +34,12 @@ class Http {
                 msg:      `http response end.`,
             };
 
-            // if (!Util.hiddenLog) {
-            //     _response.headers  = options.headers;
-            //     _response.response = result;
-            // }
             logger.info(_response);
 
             return result;
         } catch (error) {
-            error            = _.isObject(error) ? error : {};
-            error.reqid      = `${reqid}||HttpConnection.request(parameter, options)`;
-            let ErrorHandler = error.message === "Error: ETIMEDOUT" ? NetworkTimeout : HttpUncaughtException;
-
+            error        = _.isObject(error) ? error : {};
+            error.reqid  = `${reqid}||HttpConnection.request(parameter, options)`;
             let cost     = Date.now() - startTime;
             let response = {
                 reqid,
@@ -67,7 +50,7 @@ class Http {
             };
             logger.stack(error);
             logger.info(response);
-            throw new ErrorHandler(error.message);
+            throw new Error(error.message);
         }
     }
 }
