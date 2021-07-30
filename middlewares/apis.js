@@ -34,7 +34,7 @@ class ApiMiddleware extends BaseMiddleware {
         let response = {};
         if (ctx.type === "application/json") {
             response = _.cloneDeep(ctx.body);
-            if (response.data && _.isObject(response.data)) {
+            if (response && response.data && _.isObject(response.data)) {
                 _.each(response.data, (v, k) => {
                     if (_.includes(["password", "token", "verifyCode"], k)) {
                         response.data[k] = `${v.slice(0, 4)}***`;
