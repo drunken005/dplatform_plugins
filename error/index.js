@@ -238,7 +238,7 @@ class DoraError extends Error {
 
     static isSuccess(response) {
         let successFlag = false;
-        if (response && response.respCode === SUCCESS_CODE) {
+        if (response && (response.respCode === SUCCESS_CODE || response.code === SUCCESS_CODE)) {
             successFlag = true;
         }
         return successFlag;
@@ -246,12 +246,12 @@ class DoraError extends Error {
 
     toJSON() {
         return {
-            respCode: this.error ? this.error.toString() : SUCCESS_CODE,
+            respCode:  this.error ? this.error.toString() : SUCCESS_CODE,
             errorType: this.errorType,
             detail:    this.details,
-            msg:      this.reason || "",
-            sub_code: this.subCode ? this.subCode.toString() : SUCCESS_SUB_CODE,
-            success:  this.error === 0,
+            msg:       this.reason || "",
+            sub_code:  this.subCode ? this.subCode.toString() : SUCCESS_SUB_CODE,
+            success:   this.error === 0,
 
         };
     }
@@ -262,7 +262,7 @@ class DoraError extends Error {
             data:     !!data ? data : {},
             msg:      this.reason || "",
             sub_code: this.subCode ? this.subCode.toString() : SUCCESS_SUB_CODE,
-            success:  this.error === 0
+            success:  this.error === 0,
         };
     }
 }
