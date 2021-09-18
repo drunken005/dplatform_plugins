@@ -7,7 +7,6 @@ const Kms     = require("../kms");
 
 let _config = {};
 
-const KMS_DECRYPT_KEYS = ["mongo.password", "mysql.password", "db.password", "redis.password"];
 
 class Apollo {
 
@@ -17,12 +16,13 @@ class Apollo {
      */
     static async init(options) {
         let kms                           = new Kms();
-        const {logger, options: _options} = Util.checkApolloOptions(options);
+        const {logger, options: _options} = Util.checkApolloOptions(_.omit(options, ["kmsDecryptKeys"]));
         logger.info(">>>>>>>>> Init apollo and loading config       >>>>>>>>>");
-        const _namespace = apollo(_options).cluster(_options.cluster).namespace(_options.namespace);
-        const _ready     = await _namespace.ready();
-        _config          = _ready.config();
-        for (let _key of KMS_DECRYPT_KEYS) {
+        const _namespace       = apollo(_options).cluster(_options.cluster).namespace(_options.namespace);
+        const _ready           = await _namespace.ready();
+        _config                = _ready.config();
+        const kms_decrypt_keys = options.kmsDecryptKeys || [];
+        for (let _key of kms_decrypt_keys) {
             if (!!_config[_key]) {
                 _config[_key] = await kms.decrypt(_config[_key]);
             }
@@ -103,6 +103,10 @@ class Apollo {
         }
         let res = _config[key];
         return Util.isJsonString(res) ? JSON.parse(res) : res;
+    }
+
+    static _set(key, value) {
+        _config[key] = value;
     }
 
     static getMysqlConnection() {
