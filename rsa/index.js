@@ -77,7 +77,7 @@ class Rsa {
         let keys = _.sortBy(_.keys(params));
         let strs = [];
         _.each(keys, (key) => {
-            if (params[key] != null) {
+            if (params[key] != null || params[key] !== undefined || params[key] !=='') {
                 strs.push(`${key}=${params[key]}`);
             }
         });
