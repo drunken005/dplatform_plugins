@@ -4,6 +4,7 @@ const _       = require("lodash");
 const rebuild = require("./rebuild");
 const Util    = require("../utils");
 const Kms     = require("../kms");
+const urlEncode = require('urlencode');
 
 let _config = {};
 
@@ -114,8 +115,7 @@ class Apollo {
         if (!db) return null;
         db.options.logging  = db.logging ? require("../logger")().sql : db.logging;
         db.options.timezone = moment().format("Z");
-        let uri             = `mysql://${db.username}:${db.password}@${db.host}:${db.port}/${db.name}`;
-        uri                 = uri.replace(/%/g, "%25");
+        let uri             = `mysql://${db.username}:${urlEncode(db.password)}@${db.host}:${db.port}/${db.name}`;
         delete _config["db.password"];
         return [uri, db.options];
     }

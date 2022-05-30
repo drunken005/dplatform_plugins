@@ -1,6 +1,6 @@
 {
   "name": "dplatform_plugins",
-  "version": "2.5.0",
+  "version": "2.5.1",
   "description": "plugins",
   "main": "index.js",
   "scripts": {
@@ -38,6 +38,7 @@
     "redlock": "^4.2.0",
     "request-promise": "^4.2.6",
     "sequelize": "^6.3.5",
+    "urlencode": "^1.1.0",
     "uuid": "^8.3.1"
   },
   "devDependencies": {
