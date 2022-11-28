@@ -1,6 +1,6 @@
-const rp                                      = require("request-promise");
-const _                                       = require("lodash");
-const Parameter                               = require("../parameter");
+const rp        = require("request-promise");
+const _         = require("lodash");
+const Parameter = require("../parameter");
 
 
 /**
@@ -17,7 +17,7 @@ class Http {
                 reqid,
                 method:  options.method,
                 uri:     options.uri,
-                headers: options.headers,
+                headers: _.assign(options.headers, {"x-b3-traceid": reqid}),
                 params:  options.body,
                 msg:     "http request begin...",
             };
